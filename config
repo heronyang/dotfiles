@@ -1,0 +1,6 @@
+dotfiles=(
+  ".bash_profile"
+  ".zshrc"
+  ".vimrc"
+  ".hyper.js"
+)
