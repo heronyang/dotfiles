@@ -1,3 +1,5 @@
+### Specific zshrc ###
+
 # oh-my-zsh
 export ZSH=~/.oh-my-zsh
 source $ZSH/oh-my-zsh.sh
@@ -26,6 +28,13 @@ fi
 
 zgen load miekg/lean
 
+### Normal bashrc ###
+
+# Defines the include function
+include () {
+    [[ -f "$1" ]] && source "$1"
+}
+
 # Vi mode
 set -o vi
 
@@ -41,14 +50,10 @@ export PATH=/Library/Frameworks/Python.framework/Versions/Current/bin:$PATH
 alias ipython="python -c 'import IPython; IPython.terminal.ipapp.launch_new_instance()' --TerminalInteractiveShell.editing_mode=vi"
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f /Users/heron/Downloads/google-cloud-sdk/path.bash.inc ]; then
-  source '/Users/heron/Downloads/google-cloud-sdk/path.bash.inc'
-fi
+include '/Users/heron/Downloads/google-cloud-sdk/path.bash.inc'
 
 # The next line enables shell command completion for gcloud.
-if [ -f /Users/heron/Downloads/google-cloud-sdk/completion.bash.inc ]; then
-  source '/Users/heron/Downloads/google-cloud-sdk/completion.bash.inc'
-fi
+include '/Users/heron/Downloads/google-cloud-sdk/completion.bash.inc'
 
 # Java
 export JAVA_HOME=$(/usr/libexec/java_home)
@@ -85,8 +90,8 @@ alias s="screen -RR"
 alias eclimd="~/.p2/pool/plugins/org.eclim_2.6.0/bin/eclimd"
 
 # GCP
-source ~/program/lib/google-cloud-sdk/path.zsh.inc
-source ~/program/lib/google-cloud-sdk/completion.zsh.inc
+include ~/program/lib/google-cloud-sdk/path.zsh.inc
+include ~/program/lib/google-cloud-sdk/completion.zsh.inc
 
 # spark
 export SPARK_LOCAL_IP=127.0.0.1
