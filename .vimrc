@@ -10,7 +10,6 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'majutsushi/tagbar'
 Plugin 'Raimondi/delimitMate'
 Plugin 'tpope/vim-fugitive'
-"Plugin 'josuegaleas/jay'
 Plugin 'scrooloose/nerdtree'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'vim-scripts/indentpython.vim'
@@ -19,10 +18,15 @@ Plugin 'lervag/vimtex'
 Plugin 'valloric/youcompleteme'
 Plugin 'pangloss/vim-javascript'
 Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-unimpaired'
 Plugin 'mattn/emmet-vim'
 Plugin 'derekwyatt/vim-scala'
 Plugin 'avakhov/vim-yaml'
 Plugin 'aserebryakov/vim-todo-lists'
+Plugin 'w0rp/ale'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+Plugin 'flazz/vim-colorschemes'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -49,15 +53,18 @@ set mouse=a
 set ttymouse=xterm2
 
 set colorcolumn=80
+set ignorecase
 
 "** Appearance **"
 syntax on
 set t_Co=256
 
-"set background=dark
-"let g:airline_theme='jay'
-"let g:lightline = {'colorscheme': 'jay'}
-"colorscheme jay
+set background=dark
+colorscheme jellybeans
+
+" Airline theme (https://github.com/vim-airline/vim-airline/wiki/Screenshots)
+" NOTE: lightline can be an alternative which is lighter than airline
+let g:airline_theme='angr'
 
 "** NREDTree tab **"
 " Start NERDTree
@@ -65,30 +72,8 @@ set t_Co=256
 " Go to previous (last accessed) window.
 autocmd VimEnter * wincmd p
 
-" Reference: https://github.com/scrooloose/nerdtree/issues/21
 " close nerdtree is it's the last file in buffer
-function! NERDTreeQuit()
-  redir => buffersoutput
-  silent buffers
-  redir END
-  let pattern = '^\s*\(\d\+\)\(.....\) "\(.*\)"\s\+line \(\d\+\)$'
-  let windowfound = 0
-
-  for bline in split(buffersoutput, "\n")
-    let m = matchlist(bline, pattern)
-
-    if (len(m) > 0)
-      if (m[2] =~ '..a..')
-        let windowfound = 1
-      endif
-    endif
-  endfor
-
-  if (!windowfound)
-    quitall
-  endif
-endfunction
-autocmd WinEnter * call NERDTreeQuit()
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " Python
 au BufNewFile,BufRead *.py
@@ -121,3 +106,22 @@ au BufNewFile,BufRead *.ejs set filetype=html
 " inserts python breakpoint
 map <silent> <leader>b oimport pdb; pdb.set_trace()<esc>
 map <silent> <leader>B Oimport pdb; pdb.set_trace()<esc>
+
+" ale linters
+let g:ale_linters = {
+\   'python': ['flake8', 'pylint'],
+\   'c': ['cpplint'],
+\   'markdown': ['prettier'],
+\   'javascript': ['eslint'],
+\}
+
+let g:ale_fixers = {
+            \'python': ['autopep8', 'yapf']
+            \}
+
+let g:ale_completion_enabled = 1
+
+nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+nmap <silent> <C-j> <Plug>(ale_next_wrap)
+
+let g:vimtex_compiler_latexmk = {'callback' : 0}
