@@ -1,6 +1,12 @@
 # Vi mode
 set -o vi
 
+# Uses zsh if it's not yet
+if [[ $- == *i* ]]; then
+    export SHELL=zsh
+    exec zsh -l
+fi
+
 # Bash history with timestamp
 export HISTTIMEFORMAT="%d/%m/%y %T "
 
