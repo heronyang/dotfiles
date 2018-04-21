@@ -10,9 +10,6 @@ bindkey -v
 export KEYTIMEOUT=1
 bindkey "^R" history-incremental-search-backward
 
-# Z
-. `brew --prefix`/etc/profile.d/z.sh
-
 # load zgen
 source "${HOME}/.zgen/zgen.zsh"
 
