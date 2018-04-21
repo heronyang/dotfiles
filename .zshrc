@@ -17,16 +17,14 @@ source "${HOME}/.zgen/zgen.zsh"
 
 # if the init scipt doesn't exist
 if ! zgen saved; then
-  # specify plugins here
-  zgen oh-my-zsh
-  zgen oh-my-zsh plugins/git
-  zgen oh-my-zsh plugins/sudo
-  zgen oh-my-zsh plugins/command-not-found
-  # generate the init script from plugins above
-  zgen save
+    # specify plugins here
+    zgen oh-my-zsh
+    zgen oh-my-zsh plugins/git
+    zgen oh-my-zsh plugins/sudo
+    zgen oh-my-zsh plugins/command-not-found
+    zgen load miekg/lean
+    zgen save
 fi
-
-zgen load miekg/lean
 
 ### Normal bashrc ###
 
@@ -49,14 +47,8 @@ export PATH=$PATH:$GOPATH/bin
 export PATH=/Library/Frameworks/Python.framework/Versions/Current/bin:$PATH
 alias ipython="python -c 'import IPython; IPython.terminal.ipapp.launch_new_instance()' --TerminalInteractiveShell.editing_mode=vi"
 
-# The next line updates PATH for the Google Cloud SDK.
-include '/Users/heron/Downloads/google-cloud-sdk/path.bash.inc'
-
-# The next line enables shell command completion for gcloud.
-include '/Users/heron/Downloads/google-cloud-sdk/completion.bash.inc'
-
 # Java
-export JAVA_HOME=$(/usr/libexec/java_home)
+[[ -f "/usr/libexec/java_home" ]] && export JAVA_HOME="/usr/libexec/java_home"
 export PATH=$JAVA_HOME/bin:$PATH
 
 # Maven
@@ -90,8 +82,8 @@ alias s="screen -RR"
 alias eclimd="~/.p2/pool/plugins/org.eclim_2.6.0/bin/eclimd"
 
 # GCP
-include ~/program/lib/google-cloud-sdk/path.zsh.inc
-include ~/program/lib/google-cloud-sdk/completion.zsh.inc
+#include ~/program/lib/google-cloud-sdk/path.zsh.inc
+#include ~/program/lib/google-cloud-sdk/completion.zsh.inc
 
 # spark
 export SPARK_LOCAL_IP=127.0.0.1
