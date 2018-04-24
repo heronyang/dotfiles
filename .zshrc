@@ -1,3 +1,6 @@
+# Profiling: http://jb-blog.readthedocs.io/en/latest/posts/0032-debugging-zsh-startup-time.html
+# zmodload zsh/zprof
+
 ### Specific zshrc ###
 
 # oh-my-zsh
@@ -12,18 +15,35 @@ bindkey -v
 export KEYTIMEOUT=1
 bindkey "^R" history-incremental-search-backward
 
-# load zgen
-source "${HOME}/.zgen/zgen.zsh"
+# load zgen (lazily: https://github.com/tarjoilija/zgen/issues/92)
+zgen () {
+    if [[ ! -s ${HOME}/.zgen/zgen.zsh ]]; then
+        git clone --recursive https://github.com/tarjoilija/zgen.git \
+            ${HOME}/.zgen
+    fi
+    source ${HOME}/.zgen/zgen.zsh
+    zgen "$@"
+}
 
-# if the init scipt doesn't exist
-if ! zgen saved; then
+if [[ ! -s ${HOME}/.zgen/init.zsh ]]; then
+    echo "Creating a zgen save"
     # specify plugins here
     zgen oh-my-zsh
     zgen oh-my-zsh plugins/git
     zgen oh-my-zsh plugins/sudo
     zgen oh-my-zsh plugins/command-not-found
+    zgen oh-my-zsh plugins/vagrant
+    zgen oh-my-zsh plugins/bundler
+    zgen oh-my-zsh plugins/pip
+    zgen oh-my-zsh plugins/python
+    zgen oh-my-zsh plugins/virtualenv
+    zgen oh-my-zsh plugins/history-substring-search
+
     zgen load miekg/lean
     zgen save
+    zcompile ${HOME}/.zgen/init.zsh
+else
+    source ${HOME}/.zgen/init.zsh
 fi
 
 ### Normal bashrc ###
@@ -80,10 +100,6 @@ alias s="screen -RR"
 
 # eclimd
 alias eclimd="~/.p2/pool/plugins/org.eclim_2.6.0/bin/eclimd"
-
-# GCP
-#include ~/program/lib/google-cloud-sdk/path.zsh.inc
-#include ~/program/lib/google-cloud-sdk/completion.zsh.inc
 
 # spark
 export SPARK_LOCAL_IP=127.0.0.1
