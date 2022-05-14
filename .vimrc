@@ -27,6 +27,16 @@ Plugin 'w0rp/ale'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'flazz/vim-colorschemes'
+Plugin 'dart-lang/dart-vim-plugin'
+Plugin 'tomlion/vim-solidity'
+
+" Add maktaba and codefmt to the runtimepath.
+" (The latter must be installed before it can be used.)
+Plugin 'google/vim-maktaba'
+Plugin 'google/vim-codefmt'
+" Also add Glaive, which is used to configure codefmt's maktaba flags. See
+" `:help :Glaive` for usage.
+Plugin 'google/vim-glaive'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -36,7 +46,7 @@ nmap <silent> <leader>n :NERDTreeToggle<CR>
 nmap <silent> <leader>t :TagbarToggle<CR>
 nmap <silent> <leader>m :w<CR>:make<CR>
 nmap <silent> <leader>p :w<CR>:!pdflatex % && rm %<.aux %<.out %<.log && open %<.pdf<CR><CR>
-nmap <silent> <leader>f :w<CR>:JavaCorrect<CR>
+nmap <silent> <leader>f :w<CR>:FormatCode<CR>
 
 " tab
 set tabstop=4 softtabstop=4 shiftwidth=4 smarttab
@@ -125,3 +135,19 @@ nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
 let g:vimtex_compiler_latexmk = {'callback' : 0}
+
+augroup autoformat_settings
+  autocmd FileType bzl AutoFormatBuffer buildifier
+  autocmd FileType c,cpp,proto,javascript,arduino AutoFormatBuffer clang-format
+  autocmd FileType dart AutoFormatBuffer dartfmt
+  autocmd FileType go AutoFormatBuffer gofmt
+  autocmd FileType gn AutoFormatBuffer gn
+  autocmd FileType html,css,sass,scss,less,json AutoFormatBuffer js-beautify
+  autocmd FileType java AutoFormatBuffer google-java-format
+  autocmd FileType python AutoFormatBuffer yapf
+  " Alternative: autocmd FileType python AutoFormatBuffer autopep8
+  autocmd FileType rust AutoFormatBuffer rustfmt
+  autocmd FileType vue AutoFormatBuffer prettier
+augroup END
+
+set tabstop=4 shiftwidth=4 expandtab
