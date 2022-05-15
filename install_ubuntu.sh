@@ -1,7 +1,6 @@
 #!/bin/bash
 sudo apt-get update
-sudo apt-get install -y zsh
-sudo apt-get install -y git-core
+sudo apt-get install -y zsh build-essential python3-dev
 
 # Install vundle
 git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
